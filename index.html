@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Bloom | Moda Elegante</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="nav-icons"><i class="fas fa-bars" onclick="toggleMenu()"></i></div>
+        <div class="logo" onclick="navigate('home')">Dark <i class="fas fa-rose"></i> Bloom</div>
+        
+        <div class="search-bar">
+            <input type="text" id="input-busca" placeholder="Buscar na escuridão..." onkeyup="aplicarFiltros()">
+            <i class="fas fa-search"></i>
+        </div>
+
+        <div class="nav-icons" style="display: flex; align-items: center;">
+            <span id="user-greeting" onclick="navigate('minha-conta')">Olá</span>
+            <i class="fas fa-heart" title="Favoritos" style="margin-right: 15px;" onclick="navigate('favoritos')"></i>
+            <div style="position: relative; display: inline-block; cursor: pointer; margin-right: 15px;" onclick="navigate('cart')">
+                <i class="fas fa-shopping-basket"></i>
+                <span class="cart-badge" id="cart-count">0</span>
+            </div>
+            <i class="fas fa-user" id="icon-login" onclick="verificarLoginClick()"></i>
+        </div>
+    </header>
+
+    <aside id="sidebar">
+        <i class="fas fa-times close-menu" onclick="toggleMenu()"></i>
+        <div class="menu-item" onclick="navigate('home')"><i class="fas fa-home"></i> INÍCIO</div>
+        <div class="menu-item" onclick="navigate('sobre')"><i class="fas fa-crow"></i> SOBRE NÓS</div>
+        <div class="menu-item" onclick="filtrarCategoria('todos')"><i class="fas fa-tshirt"></i> TODAS AS ROUPAS</div>
+        <div class="menu-item" onclick="filtrarCategoria('vestido')"><i class="fas fa-female"></i> VESTIDOS</div>
+        <div class="menu-item" onclick="filtrarCategoria('conjunto')"><i class="fas fa-heart"></i> CONJUNTOS</div>
+        <div class="menu-item" onclick="filtrarCategoria('macacao')"><i class="fas fa-child"></i> MACACÕES</div>
+        <div class="menu-item" onclick="navigate('politicas')"><i class="fas fa-file-contract"></i> POLÍTICAS E FAQ</div>
+    </aside>
+
+    <div id="toast">Ação realizada!</div>
+
+    <main id="app-container">
+        
+        <section id="home" class="page-section active">
+            <div class="hero-banner">
+                <div class="hero-content">
+                    <h1>Coleção Outono Inverno</h1>
+                    <p>A elegância que não teme a escuridão.</p>
+                    <button class="btn-primary" style="width: auto; padding: 10px 30px;" onclick="document.getElementById('acervo').scrollIntoView({behavior: 'smooth'})">VER COLEÇÃO</button>
+                </div>
+            </div>
+
+            <div class="filter-controls" id="acervo">
+                <span id="titulo-categoria">NOSSO ACERVO</span>
+                <select id="sort-options" onchange="aplicarFiltros()">
+                    <option value="padrao">Ordenar por (Padrão)</option>
+                    <option value="preco-asc">Menor Preço</option>
+                    <option value="preco-desc">Maior Preço</option>
+                    <option value="az">Ordem Alfabética</option>
+                </select>
+            </div>
+            
+            <div class="product-grid" id="produtos-grid"></div>
+        </section>
+
+        <section id="favoritos" class="page-section">
+            <div class="section-title"><span>MEUS FAVORITOS</span></div>
+            <div class="product-grid" id="favoritos-grid"></div>
+        </section>
+
+        <section id="produto-detalhe" class="page-section">
+            <div class="product-detail-container">
+                <div class="product-detail-gallery">
+                    <img id="detalhe-img" src="" alt="">
+                    <div class="thumbnail-row" id="detalhe-thumbnails">
+                        </div>
+                </div>
+                <div class="product-detail-info">
+                    <h1 id="detalhe-nome">Nome</h1>
+                    <div class="price" id="detalhe-preco">R$ 0,00</div>
+                    <div class="stars" style="color: gold; margin-bottom: 15px;"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i> (12 avaliações)</div>
+                    <p id="detalhe-desc">Descrição do produto.</p>
+                    
+                    <h3 style="font-family: var(--font-logo); color: #aaa; margin-bottom: 10px;">Selecione o Tamanho:</h3>
+                    <div class="size-selector">
+                        <button class="size-btn active" onclick="selecionarTamanho(this, 'P')">P</button>
+                        <button class="size-btn" onclick="selecionarTamanho(this, 'M')">M</button>
+                        <button class="size-btn" onclick="selecionarTamanho(this, 'G')">G</button>
+                        <button class="size-btn" onclick="selecionarTamanho(this, 'GG')">GG</button>
+                    </div>
+                    
+                    <button class="btn-primary" id="btn-add-detalhe">ADICIONAR AO CARRINHO</button>
+                    
+                    <div class="reviews-section">
+                        <h3>Avaliações de Clientes</h3>
+                        <div class="review-card"><strong>Ana P.</strong> <span style="color:gold;">★★★★★</span><br>"Caimento perfeito, o tecido é maravilhoso!"</div>
+                        <div class="review-card"><strong>Camila S.</strong> <span style="color:gold;">★★★★★</span><br>"Estética impecável. Chegou no prazo."</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="sobre" class="page-section"><div class="form-container" style="max-width: 800px; text-align: center;"><h2>A Essência Dark Bloom</h2><i class="fas fa-rose" style="font-size: 3rem; color: var(--accent-rose); margin-bottom: 20px;"></i><p style="font-size: 1.2rem; line-height: 1.8; color: #ccc;">Nascida nas ruas, a Dark Bloom não é apenas moda, é uma declaração. Criada para as almas noturnas que encontram beleza nas sombras...</p></div></section>
+
+        <section id="politicas" class="page-section">
+            <div class="form-container" style="max-width: 800px;">
+                <h2>Políticas e FAQ</h2>
+                <h3 style="color: var(--accent-rose); margin-top: 20px;">Trocas e Devoluções</h3>
+                <p style="margin-bottom: 20px; color:#aaa;">Você tem até 7 dias corridos após o recebimento para solicitar a troca ou devolução da sua peça, desde que esteja com a etiqueta e sem sinais de uso.</p>
+                <h3 style="color: var(--accent-rose);">Prazos de Entrega</h3>
+                <p style="margin-bottom: 20px; color:#aaa;">Nossas entregas são feitas via Correios (PAC e SEDEX) ou transportadora. O prazo é calculado no momento do checkout e varia conforme a região.</p>
+                <h3 style="color: var(--accent-rose);">Perguntas Frequentes (FAQ)</h3>
+                <p style="color:#aaa;"><strong>Como rastrear meu pedido?</strong> Após a confirmação, você receberá um código no seu e-mail.<br><strong>Vocês vendem atacado?</strong> Não, nossas peças são exclusivas para o varejo.</p>
+            </div>
+        </section>
+
+        <section id="login" class="page-section">
+            <div class="form-container" id="form-login">
+                <h2>Acessar Conta</h2>
+                <div class="input-group"><label>E-mail</label><input type="email" id="login-email"></div>
+                <div class="input-group"><label>Senha</label><input type="password" id="login-senha"></div>
+                <button class="btn-primary" onclick="fazerLogin()">ENTRAR</button>
+                <p style="text-align:center; margin-top:20px; cursor:pointer; color:var(--accent-rose);" onclick="toggleAuthForm('register')">Criar nova conta</p>
+            </div>
+            <div class="form-container" id="form-register" style="display: none;">
+                <h2>Criar Conta</h2>
+                <div class="input-group"><label>Nome</label><input type="text" id="reg-nome"></div>
+                <div class="input-group"><label>E-mail</label><input type="email" id="reg-email"></div>
+                <div class="input-group"><label>Senha</label><input type="password" id="reg-senha"></div>
+                <button class="btn-primary" onclick="criarConta()">CADASTRAR</button>
+                <p style="text-align:center; margin-top:20px; cursor:pointer; color:var(--accent-rose);" onclick="toggleAuthForm('login')">Já tenho conta</p>
+            </div>
+        </section>
+
+        <section id="minha-conta" class="page-section">
+            <div class="form-container" style="max-width: 800px; text-align: center;">
+                <h2>Seu Perfil Sombrio</h2>
+                <h3 id="perfil-nome" style="margin-bottom: 5px;">Nome</h3>
+                <p id="perfil-email" style="color: #aaa; margin-bottom: 30px;">Email</p>
+                
+                <h3 style="text-align: left; border-bottom: 1px solid #444; padding-bottom: 10px; margin-bottom: 20px;">Histórico de Pedidos</h3>
+                <div id="historico-pedidos" style="text-align: left; margin-bottom: 30px;">
+                    </div>
+
+                <button class="btn-primary" style="background: #a14848; color: white;" onclick="fazerLogout()">SAIR DA CONTA</button>
+            </div>
+        </section>
+
+        <section id="cart" class="page-section">
+            <div class="form-container" style="max-width: 700px;">
+                <h2>Seu Carrinho</h2>
+                <div id="cart-items-container"></div>
+                <div class="cart-total" id="cart-total-display">Total: R$ 0,00</div>
+                <button class="btn-primary" onclick="goToCheckout()">IR PARA PAGAMENTO</button>
+            </div>
+        </section>
+
+        <section id="checkout" class="page-section"><div class="form-container"><h2>Pagamento Seguro</h2><div class="input-group"><label>Número do Cartão</label><input type="text" placeholder="0000 0000 0000 0000"></div><div style="display: flex; gap: 15px;"><div class="input-group" style="flex: 1;"><label>Validade</label><input type="text" placeholder="MM/AA"></div><div class="input-group" style="flex: 1;"><label>CVV</label><input type="text" placeholder="123"></div></div><div class="input-group"><label>Nome Impresso</label><input type="text"></div><button class="btn-primary" onclick="processarPagamento()">CONFIRMAR COMPRA</button></div></section>
+
+    </main>
+
+    <footer>
+        <div style="display:flex; justify-content:center; gap:30px; margin-bottom:20px;">
+            <a href="#" onclick="navigate('politicas')" style="color:#d6a3a3; text-decoration:none;">Políticas</a>
+            <a href="#" onclick="navigate('politicas')" style="color:#d6a3a3; text-decoration:none;">Dúvidas (FAQ)</a>
+        </div>
+        DARK BLOOM © 2026 - A beleza que floresce no escuro.
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
